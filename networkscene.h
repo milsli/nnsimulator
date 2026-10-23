@@ -2,8 +2,8 @@
 #define NETWORKSCENE_H
 
 #include <QGraphicsScene>
+#include "commons.h"
 
-class Matrix;
 
 class NetworkScene : public QGraphicsScene
 {

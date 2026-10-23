@@ -65,21 +65,6 @@ bool Network::readFile(const string &fileName, char character, const char md)
 
     inputMatrix->setInput(std::move(matrixRow));
     layer.push_front(inputMatrix);
-
-    // if (md == 'm')
-    //     character = tolower(character);
-
-    // vector<double> oneLetter(8);
-    // oneLetter[0] = character & 0b0000'0001;
-    // oneLetter[1] = character & 0b0000'0010;
-    // oneLetter[2] = character & 0b0000'0100;
-    // oneLetter[3] = character & 0b0000'1000;
-    // oneLetter[4] = character & 0b0001'0000;
-    // oneLetter[5] = character & 0b0010'0000;
-    // oneLetter[6] = character & 0b0100'0000;
-    // oneLetter[7] = character & 0b1000'0000;
-
- //   output.push_back(oneLetter);
     return true;
 }
 

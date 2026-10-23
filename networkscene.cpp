@@ -1,5 +1,4 @@
 #include "networkscene.h"
-#include "commons.h"
 #include <QGraphicsSimpleTextItem>
 
 NetworkScene::NetworkScene(QObject *parent)
