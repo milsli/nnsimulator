@@ -54,8 +54,7 @@ void NetworkScene::showOutput(const QList<Matrix *>& network)
         Matrix *mat = network[layerIndex];
         for (uint16_t j = 0; j < elementCount; ++j) {
             QPair<int, int> point = (*outputAksonMatrix)[i][j];
-            double var = (*mat)[0][j];
-            auto *txt =  addSimpleText(QString::number(var));
+            auto *txt =  addSimpleText(QString::number((*mat)[0][j]));
             txt->setPos(point.first + 2, point.second - 8);
         }
         layerIndex += 2;

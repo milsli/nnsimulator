@@ -53,10 +53,36 @@ public:
         for (uint16_t idx = 0; idx < indexes; ++idx) {
             matrixData_[idx] = dist(rd);
         }
+        int y = 0;
+        ++y;
     }
 
-    void wagsNormalization()
-    {}
+    void normalization()
+    {
+        // normalizacja ma na celu "spłaszczenia wartości do zakresu <-1,1>"
+        // algorytm:
+        // 0. wyznaczanie min i max
+        // 1. obliczanie r = max - min, połowa = r/2
+        // 2. poprawka = max - połowa;
+        // 3. od wyszyskich elementów odejmij poprawkę - osiągnięta równowaga dla ujemnych i dodatnich
+        // 4. podzielenie wszystkich wartości przez połowę
+
+        for (int i = 0; i < rows_; ++i) {
+            T min = matrixData_[i], max = matrixData_[i];
+            for (int j = i * columns_; j < ((i + 1) * columns_); ++j) {
+                if (min > matrixData_[j])
+                    min = matrixData_[j];
+                if (max < matrixData_[j])
+                    max = matrixData_[j];
+            }
+            T half = (max - min) / 2.0;
+            T adjustment = max - half;
+
+            for (int j = i * columns_; j < ((i + 1) * columns_); ++j) {
+                matrixData_[j] = (matrixData_[j] - adjustment) / half;
+            }
+        }
+    }
 
     // operator * nie ma charakteru ogólnego - wywoływany z macierzy [1,x] w celu wygenetowania odpowiedzi [1,y]. Ponadto uwzględnia BIAS
     MatrixTemplate<T> operator*(const MatrixTemplate<T> &matrix)
