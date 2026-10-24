@@ -74,7 +74,7 @@ void MainWindow::setupNetworkSlot()
 
         if (network->readFile("..//NNCiag/A1_d.bmp", '0', '0') == true) {
             network->goForward();
-            networkScene->showOutput(network->outputVector());
+            networkScene->showOutput(network->network());
         }
 
 

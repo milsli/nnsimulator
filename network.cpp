@@ -13,20 +13,20 @@ Network::Network(const uint16_t inputSignals, const QList<uint16_t> &layers)
     Matrix *matrix = new Matrix(layers[0], inputSignals);
     matrix->setRandomValues();
     matrix->wagsNormalization();
-    layer.append(matrix);
-    layer.append(new Matrix(layers[0]));        // warstwa sygnałów wyjściowych z pierwszej warstwy
+    layer_.append(matrix);
+    layer_.append(new Matrix(layers[0]));        // warstwa sygnałów wyjściowych z pierwszej warstwy
     for (uint16_t i = 1; i < layersCount_; ++i) {
         matrix = new Matrix(layers[i], layers[i - 1]);
         matrix->setRandomValues();
         matrix->wagsNormalization();
-        layer.append(matrix);
-        layer.append(new Matrix(layers[i]));        // warstwa sygnałów wyjściowych z i-tej warstwy
+        layer_.append(matrix);
+        layer_.append(new Matrix(layers[i]));        // warstwa sygnałów wyjściowych z i-tej warstwy
     }
 }
 
 Network::~Network()
 {
-    for (Matrix *m : std::as_const(layer)) {
+    for (Matrix *m : std::as_const(layer_)) {
         delete m;
     }
 }
@@ -64,7 +64,7 @@ bool Network::readFile(const string &fileName, char character, const char md)
     }
 
     inputMatrix->setInput(std::move(matrixRow));
-    layer.push_front(inputMatrix);
+    layer_.push_front(inputMatrix);
     return true;
 }
 
@@ -79,15 +79,15 @@ void Network::goForward()
     uint16_t layerCount = 0;
 
     while (layerCount < layersCount_) {
-        *layer[currentLayer + 1] = (*layer[currentLayer]) * (*layer[currentLayer - 1]);
+        *layer_[currentLayer + 1] = (*layer_[currentLayer]) * (*layer_[currentLayer - 1]);
         currentLayer += 2;
         ++layerCount;
     }
 }
 
-Matrix* Network::outputVector()
+QList<Matrix*> Network::network()
 {
-    return layer[layer.size() - 1];
+    return layer_;
 }
 
 

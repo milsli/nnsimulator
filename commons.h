@@ -84,13 +84,12 @@ public:
         return output;
     }
 
-
-    double *operator [](size_t  row)
+    T *operator [](size_t  row)
     {
         return &matrixData_[row * columns_];
     }
 
-    const double* operator[](size_t  row) const
+    const T* operator[](size_t  row) const
     {
         return &matrixData_[row * columns_];
     }

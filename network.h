@@ -25,14 +25,14 @@ public:
     //Matrix
 
     void goForward();
-    Matrix* outputVector();
+    QList<Matrix *> network();
 
 private:
     uint16_t layersCount_;
     Matrix *inputMatrix;
 
     // definicja całej sieci
-    QList<Matrix*> layer;
+    QList<Matrix*> layer_;
 
     // train sequence
     //std::vector<Matrix> inputSignals;  // train x sequence in inputSignals[0] w sumie elementów tyle co warstw

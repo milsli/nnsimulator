@@ -11,16 +11,17 @@ class NetworkScene : public QGraphicsScene
 public:
     explicit NetworkScene(QObject *parent = nullptr);
 
-    void setScene(QList<uint16_t> netDefinition);
-    void showOutput(const Matrix *output);
+    void setScene(const QList<uint16_t>& netDefinition);
+    void showOutput(const QList<Matrix *> &network);
 
 private:
     QList<QPair<double, double>> outputValueCoordinates;
 
 private:
-    // uint16_t layers;
-    QList<uint16_t> neurons;
-    Matrix *outputAksonMatrix;
+    uint16_t layers_;
+    uint16_t maxNeuronsInLayer_;
+    MatrixTemplate<QPair<int, int>> *outputAksonMatrix;
+    QList<uint16_t> netDefinition_;
 
 signals:
 };
