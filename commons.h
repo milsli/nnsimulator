@@ -82,9 +82,20 @@ public:
                 matrixData_[j] = (matrixData_[j] - adjustment) / half;
             }
         }
+    }
 
-        int i = 0;
-        ++i;
+    void activation()
+    {
+        // realizacja funkcji 1/(1+exp(-sigma * x)) i skalowanie do przedziału <-1,1>
+
+        static double sigma = -0.5;
+        for (int i = 0; i < rows_; ++i) {   // tu tylko jedna iteracja
+            for (int j = i * columns_; j < ((i + 1) * columns_); ++j) {
+                double y = 1/(1 + exp(sigma * matrixData_[j]));
+                y *= 2.0;
+                matrixData_[j] = (y - 1);
+            }
+        }
     }
 
     // operator * nie ma charakteru ogólnego - wywoływany z macierzy [1,x] w celu wygenetowania odpowiedzi [1,y]. Ponadto uwzględnia BIAS

@@ -16,7 +16,6 @@ public:
 
 public:
 
-    // Matrix sigmoidActivation(const Matrix &matrix, const double sigma = 0.5);
     // void sigmoid_derivate(Matrix &matrix, const double sigma);
     // Matrix squareActivation(const Matrix &matrix);
     // Matrix quasiLineActivation(const Matrix &matrix, const double x = 0.5);

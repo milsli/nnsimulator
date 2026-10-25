@@ -81,7 +81,7 @@ void Network::goForward()
 
     while (layerCount < layersCount_) {
         *layer_[currentLayer + 1] = (*layer_[currentLayer]) * (*layer_[currentLayer - 1]);
-        layer_[currentLayer + 1]->normalization();
+        layer_[currentLayer + 1]->activation();
         currentLayer += 2;
         ++layerCount;
     }
@@ -91,23 +91,6 @@ QList<Matrix*> Network::network()
 {
     return layer_;
 }
-
-
-// Matrix Network::sigmoidActivation(const Matrix &matrix, const double sigma)
-// {
-//     Matrix ret(matrix.size(), vector<double>(matrix[0].size()));
-
-//     int row = matrix.size();
-//     int col = matrix[0].size();
-
-//     for (int i = 0; i < row; ++i) {
-//         for (int j = 0; j < col; ++j) {
-//             ret[i][j] = 1.0 / (1.0 + exp(-sigma * matrix[i][j]));
-//         }
-//     }
-
-//     return ret;
-// }
 
 // void Network::sigmoid_derivate(Matrix &matrix, const double sigma) // do poprawy
 // {
