@@ -82,6 +82,9 @@ public:
                 matrixData_[j] = (matrixData_[j] - adjustment) / half;
             }
         }
+
+        int i = 0;
+        ++i;
     }
 
     // operator * nie ma charakteru ogólnego - wywoływany z macierzy [1,x] w celu wygenetowania odpowiedzi [1,y]. Ponadto uwzględnia BIAS

@@ -64,6 +64,7 @@ bool Network::readFile(const string &fileName, char character, const char md)
     }
 
     inputMatrix->setInput(std::move(matrixRow));
+    inputMatrix->normalization();
     layer_.push_front(inputMatrix);
     return true;
 }
@@ -80,6 +81,7 @@ void Network::goForward()
 
     while (layerCount < layersCount_) {
         *layer_[currentLayer + 1] = (*layer_[currentLayer]) * (*layer_[currentLayer - 1]);
+        layer_[currentLayer + 1]->normalization();
         currentLayer += 2;
         ++layerCount;
     }
