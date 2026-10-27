@@ -21,9 +21,9 @@ public:
     : rows_(1)
     , columns_(columns)
     , matrixData_(columns_)
-{
+    {
 
-}
+    }
 
     MatrixTemplate(const uint16_t rows, const uint16_t columns)
         : rows_(rows)
@@ -101,8 +101,8 @@ public:
     // operator * nie ma charakteru ogólnego - wywoływany z macierzy [1,x] w celu wygenetowania odpowiedzi [1,y]. Ponadto uwzględnia BIAS
     MatrixTemplate<T> operator*(const MatrixTemplate<T> &matrix)
     {
-        // this - to macierz reprezentująca warstwę neuronów a matrix - wektor danych wejściowych
-        assert(columns_ == matrix.columns_);    // liczba kolumn 1-szej macierzy == liczbie kolumn (!) 2-giej macierzy
+        // this - to macierz reprezentująca warstwę neuronów (z BIAS-ami) a matrix - wektor danych wejściowych, który docelowo będzie uzupełniony o 1 (do BIAS-a)
+        assert(columns_ == matrix.columns_ + 1);    // liczba kolumn 1-szej macierzy == liczbie kolumn (!) 2-giej macierzy z dodaną 1 dla BIAS-a
 
         assert( matrix.rows_ == 1);
 
@@ -114,9 +114,9 @@ public:
 
         MatrixTemplate<T> output(1, rows_);
         for (uint16_t i = 0; i < rows_; ++i) {
-            double sum = 0.0;
-            for (uint16_t j = 0; j < columns_; ++j) {
-                sum += matrixData_[(i * columns_) + j] * matrix.matrixData_[j];
+            double sum = matrixData_[(i * columns_)];
+            for (uint16_t j = 1; j < columns_; ++j) {
+                sum += matrixData_[(i * columns_) + j] * matrix.matrixData_[j - 1];
             }
             output[0][i] = sum;
         }

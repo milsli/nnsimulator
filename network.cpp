@@ -10,13 +10,13 @@ Network::Network(const uint16_t inputSignals, const QList<uint16_t> &layers)
 {
     layersCount_ = layers.size();
 
-    Matrix *matrix = new Matrix(layers[0], inputSignals);
+    Matrix *matrix = new Matrix(layers[0], inputSignals + 1);
     matrix->setRandomValues();
     matrix->normalization();
     layer_.append(matrix);
     layer_.append(new Matrix(layers[0]));        // warstwa sygnałów wyjściowych z pierwszej warstwy
     for (uint16_t i = 1; i < layersCount_; ++i) {
-        matrix = new Matrix(layers[i], layers[i - 1]);
+        matrix = new Matrix(layers[i], layers[i - 1] + 1);
         matrix->setRandomValues();
         matrix->normalization();
         layer_.append(matrix);
