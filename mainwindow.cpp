@@ -67,18 +67,17 @@ void MainWindow::setupNetworkSlot()
         uint16_t inputSignals = dialog->layers(layers);
         networkScene->clear();
         networkScene->setScene(layers);
-        network = new Network(inputSignals, layers);
+        network = new Network(inputSignals, layers, this);
 
         //////////////////////////
         /// testowanie
 
-        if (network->readFile("..//NNCiag/A1_d.bmp", '0', '0') == true) {
-            network->goForward();
-            networkScene->showOutput(network->network());
-        }
+        // if (network->readFile("..//NNCiag/A1_d.bmp") == true) {
+        //     network->goForward();
+        //     networkScene->showOutput(network->network());
+        // }
 
-
-
+        network->readLearningSequence();
 
         /////////////////////////
     }

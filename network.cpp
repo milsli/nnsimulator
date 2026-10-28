@@ -6,10 +6,12 @@
 
 using namespace std;
 
-Network::Network(const uint16_t inputSignals, const QList<uint16_t> &layers)
+Network::Network(const uint16_t inputSignals, const QList<uint16_t> &layers, QWidget *parent)
+    : parent_(parent)
+    , layersCount_(layers.size())
+    , inputMatrix(nullptr)
+    , outputMatrix(nullptr)
 {
-    layersCount_ = layers.size();
-
     Matrix *matrix = new Matrix(layers[0], inputSignals + 1);
     matrix->setRandomValues();
     matrix->normalization();
@@ -31,7 +33,7 @@ Network::~Network()
     }
 }
 
-bool Network::readFile(const string &fileName, char character, const char md)
+bool Network::readFile(const string &fileName)
 {
     QFile file(QString::fromStdString(fileName));
     if (!file.open(QIODevice::ReadOnly)) {
@@ -49,7 +51,6 @@ bool Network::readFile(const string &fileName, char character, const char md)
     const uchar* pixelData = reinterpret_cast<const uchar*>(data.constData() + pixelDataOffset);
 
     // BMP zapisuje obraz OD DOŁU
-    inputMatrix = new Matrix(400);
     int counter = 0;
     QList<double> matrixRow;
     for (int y = 19; y >= 0; y--) {
@@ -63,13 +64,145 @@ bool Network::readFile(const string &fileName, char character, const char md)
         }
     }
 
+    inputMatrix = new Matrix(400);
     inputMatrix->setInput(std::move(matrixRow));
     inputMatrix->normalization();
     layer_.push_front(inputMatrix);
     return true;
 }
 
+void Network::readFile(const QString &fileName, char &character, const char md)
+{
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qDebug() << "Nie można otworzyć pliku " + fileName;
+        throw QFile::FileError();
+    }
+
+    QByteArray data = file.readAll();
+    file.close();
+
+    // Offset danych pikseli (bajty 10–13)
+    quint32 pixelDataOffset;
+    memcpy(&pixelDataOffset, data.constData() + 10, 4);
+
+    const uchar* pixelData = reinterpret_cast<const uchar*>(data.constData() + pixelDataOffset);
+
+    // BMP zapisuje obraz OD DOŁU
+
+    int counter = 0;
+    QList<double> matrixRow;
+    for (int y = 19; y >= 0; y--) {
+        const uchar* row = pixelData + y * 4;  // 4 bajty na wiersz
+
+        for (int x = 0; x < 20; x++) {
+            int byteIndex = x / 8;
+            int bitIndex  = 7 - (x % 8);
+            bool pixel = (row[byteIndex] >> bitIndex) & 1;
+            matrixRow.append(pixel ? 1 : 0);
+        }
+    }
+
+    if (inputMatrix == nullptr) {
+        inputMatrix = new Matrix(400);
+        inputMatrix->setInput(std::move(matrixRow));
+    } else {
+        inputMatrix->addInputData(std::move(matrixRow));
+    }
+
+    QList<double> outputColumn({0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
+    if (character == 'A' || character == 'a') {
+        if (md == 'd')
+            outputColumn[0] = 1;
+        else if (md == 'm')
+            outputColumn[1] = 1;
+        else
+            QMessageBox::critical(parent_, "Error", "Błąd w danych wejściowych [a]");
+    } else if (character == 'B' || character == 'b') {
+        if (md == 'd')
+            outputColumn[2] = 1;
+        else if (md == 'm')
+            outputColumn[3] = 1;
+        else
+            QMessageBox::critical(parent_, "Error", "Błąd w danych wejściowych [b]");
+    } else if (character == 'C' || character == 'c') {
+        if (md == 'd')
+            outputColumn[4] = 1;
+        else if (md == 'm')
+            outputColumn[5] = 1;
+        else
+            QMessageBox::critical(parent_, "Error", "Błąd w danych wejściowych [c]");
+    } else if (character == 'D' || character == 'd') {
+        if (md == 'd')
+            outputColumn[6] = 1;
+        else if (md == 'm')
+            outputColumn[7] = 1;
+        else
+            QMessageBox::critical(parent_, "Error", "Błąd w danych wejściowych [d]");
+    }  else if (character == 'E' || character == 'e') {
+        if (md == 'd')
+            outputColumn[8] = 1;
+        else if (md == 'm')
+            outputColumn[9] = 1;
+        else
+            QMessageBox::critical(parent_, "Error", "Błąd w danych wejściowych [e]");
+    } else if (character == 'F' || character == 'f') {
+        if (md == 'd')
+            outputColumn[10] = 1;
+        else if (md == 'm')
+            outputColumn[11] = 1;
+        else
+            QMessageBox::critical(parent_, "Error", "Błąd w danych wejściowych [f]");
+    } else if (character == 'G' || character == 'g') {
+        if (md == 'd')
+            outputColumn[12] = 1;
+        else if (md == 'm')
+            outputColumn[13] = 1;
+        else
+            QMessageBox::critical(parent_, "Error", "Błąd w danych wejściowych [g]");
+    } else if (character == 'H' || character == 'h') {
+        if (md == 'd')
+            outputColumn[14] = 1;
+        else if (md == 'm')
+            outputColumn[15] = 1;
+        else
+            QMessageBox::critical(parent_, "Error", "Błąd w danych wejściowych [h]");
+    }
+
+    if (outputMatrix == nullptr) {
+        outputMatrix = new Matrix(16);
+        outputMatrix->setInput(outputColumn);
+    } else {
+        outputMatrix->addInputData(outputColumn);
+    }
+}
+
 void Network::backPropagation()
+{
+
+}
+
+void Network::readLearningSequence()
+{
+    for (char ch = 'A'; ch <= 'H'; ++ch) {
+        for (char n = '1'; n <= '3'; ++n) {
+            QString name(ch);
+            name += n;
+            name += "_d.bmp";
+            QString fileName = "..//NNCiag/" + name;
+            try {
+                readFile(fileName, ch, 'm');
+                readFile(fileName, ch, 'd');
+            } catch (QFile::FileError &err) {
+                QMessageBox::critical(parent_, "FileError","Odczyt pliku z danymi wejściowymi");
+            }
+        }
+    }
+
+    inputMatrix->normalization();
+}
+
+void Network::startLearning()
 {
 
 }

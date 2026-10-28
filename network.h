@@ -8,11 +8,14 @@
 class Network
 {
 public:
-    Network(const uint16_t inputSignals, const QList<uint16_t> &layers);
+    Network(const uint16_t inputSignals, const QList<uint16_t> &layers, QWidget *parent);
     ~Network();
 
-    bool readFile(const std::string &fileName, char character, const char md);
+    bool readFile(const std::string &fileName);
+    void readFile(const QString &fileName, char &character, const char md);
     void backPropagation();
+    void readLearningSequence();
+    void startLearning();
 
 public:
 
@@ -20,15 +23,14 @@ public:
     // Matrix squareActivation(const Matrix &matrix);
     // Matrix quasiLineActivation(const Matrix &matrix, const double x = 0.5);
 
-
-    //Matrix
-
     void goForward();
     QList<Matrix *> network();
 
 private:
+    QWidget *parent_;
     uint16_t layersCount_;
     Matrix *inputMatrix;
+    Matrix *outputMatrix;
 
     // definicja całej sieci
     QList<Matrix*> layer_;

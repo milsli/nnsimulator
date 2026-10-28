@@ -43,6 +43,20 @@ public:
         matrixData_ = list;
     }
 
+    void addInputData(const QList<double>& list)
+    {
+        // tu uwaga: list.cout musi odpowidać liczbie kolumn
+        ++rows_;
+        matrixData_.append(list);
+    }
+
+    void addInputData(const QList<double>&& list)
+    {
+        // tu uwaga: list.cout musi odpowidać liczbie kolumn
+        ++rows_;
+        matrixData_.append(list);
+    }
+
     void setRandomValues()
     {
         std::random_device rd;
