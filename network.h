@@ -28,6 +28,7 @@ public:
 
 private:
     QWidget *parent_;
+    uint16_t inputSignals_;
     uint16_t layersCount_;
     Matrix *inputMatrix;
     Matrix *outputMatrix;

@@ -28,11 +28,13 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 MainWindow::~MainWindow() {
-    delete network;
+    delete network_;
 }
 
 void MainWindow::startLearning()
 {
+    network_->startLearning();
+    networkScene_->showOutput(network_->network());
 }
 
 void MainWindow::readFiles()
@@ -65,9 +67,9 @@ void MainWindow::setupNetworkSlot()
     if (dialog->exec() == QDialog::Accepted) {
         QList<uint16_t> layers;
         uint16_t inputSignals = dialog->layers(layers);
-        networkScene->clear();
-        networkScene->setScene(layers);
-        network = new Network(inputSignals, layers, this);
+        networkScene_->clear();
+        networkScene_->setScene(layers);
+        network_ = new Network(inputSignals, layers, this);
 
         //////////////////////////
         /// testowanie
@@ -77,7 +79,7 @@ void MainWindow::setupNetworkSlot()
         //     networkScene->showOutput(network->network());
         // }
 
-        network->readLearningSequence();
+        network_->readLearningSequence();
 
         /////////////////////////
     }
@@ -108,10 +110,10 @@ void MainWindow::setupView()
     readFilesButton = new QPushButton("Read sequence");
 
 
-    networkScene = new NetworkScene(this);
-    networkScene->setScene({2,2});
+    networkScene_ = new NetworkScene(this);
+    networkScene_->setScene({2,2});
     networkView = new NetworkView(this);
-    networkView->setScene(networkScene);
+    networkView->setScene(networkScene_);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
 

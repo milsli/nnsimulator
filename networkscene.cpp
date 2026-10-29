@@ -48,7 +48,7 @@ void NetworkScene::setScene(const QList<uint16_t> &netDefinition)
 
 void NetworkScene::showOutput(const QList<Matrix *>& network)
 {
-    uint16_t layerIndex = 2;
+    uint16_t layerIndex = 1;
     for (int i = 0; i < layers_; ++i) {
         uint16_t elementCount = netDefinition_[i];
         Matrix *mat = network[layerIndex];

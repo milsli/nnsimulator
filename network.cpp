@@ -8,6 +8,7 @@ using namespace std;
 
 Network::Network(const uint16_t inputSignals, const QList<uint16_t> &layers, QWidget *parent)
     : parent_(parent)
+    , inputSignals_(inputSignals)
     , layersCount_(layers.size())
     , inputMatrix(nullptr)
     , outputMatrix(nullptr)
@@ -28,9 +29,19 @@ Network::Network(const uint16_t inputSignals, const QList<uint16_t> &layers, QWi
 
 Network::~Network()
 {
+    if (inputMatrix != nullptr) {
+        delete inputMatrix;
+    }
+
+    if (outputMatrix != nullptr) {
+        delete outputMatrix;
+    }
+
     for (Matrix *m : std::as_const(layer_)) {
         delete m;
     }
+
+
 }
 
 bool Network::readFile(const string &fileName)
@@ -64,7 +75,7 @@ bool Network::readFile(const string &fileName)
         }
     }
 
-    inputMatrix = new Matrix(400);
+    inputMatrix = new Matrix(inputSignals_);
     inputMatrix->setInput(std::move(matrixRow));
     inputMatrix->normalization();
     layer_.push_front(inputMatrix);
@@ -104,7 +115,7 @@ void Network::readFile(const QString &fileName, char &character, const char md)
     }
 
     if (inputMatrix == nullptr) {
-        inputMatrix = new Matrix(400);
+        inputMatrix = new Matrix(inputSignals_);
         inputMatrix->setInput(std::move(matrixRow));
     } else {
         inputMatrix->addInputData(std::move(matrixRow));
@@ -204,14 +215,41 @@ void Network::readLearningSequence()
 
 void Network::startLearning()
 {
+    const uint32_t MAX_ITERATIONS = 1;
+    uint32_t counter = 0;
+    while (counter < MAX_ITERATIONS) {
+        for (int i = 0; i < inputMatrix->rows(); ++i) {
+            // pobranie kolejnego wiersza z ciągu uczącego
+            Matrix* row = new Matrix(inputSignals_);                      // tu sparametryzować
+            row->setInput(inputMatrix->row(i));
+            layer_.prepend(row);
 
+            // obliczenie wyjścia
+            uint16_t currentLayer = 1;
+            uint16_t layerCount = 0;
+            while (layerCount < layersCount_) {
+                *layer_[currentLayer + 1] = (*layer_[currentLayer]) * (*layer_[currentLayer - 1]);
+                layer_[currentLayer + 1]->activation();
+                currentLayer += 2;
+                ++layerCount;
+            }
+
+        // wyznaczenie różnicy - jeżeli minimalna to koniec
+        // poprawka wag - back propagation
+
+            // usunięcie wiersza wejściowego z layers_
+            if (layer_.isEmpty() != true) {
+                layer_.removeFirst();
+            }
+        }
+        ++counter;
+    }
 }
 
 void Network::goForward()
 {
     uint16_t currentLayer = 1;
     uint16_t layerCount = 0;
-
     while (layerCount < layersCount_) {
         *layer_[currentLayer + 1] = (*layer_[currentLayer]) * (*layer_[currentLayer - 1]);
         layer_[currentLayer + 1]->activation();

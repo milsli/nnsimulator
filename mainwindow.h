@@ -50,7 +50,7 @@ private:
 // *** menu ***
 
 // *** Network View ***
-    NetworkScene * networkScene;
+    NetworkScene * networkScene_;
     NetworkView * networkView;
 // *** Network View ***
 
@@ -60,7 +60,7 @@ private:
 
     QLineEdit *messagesBox;
 
-    Network *network;
+    Network *network_;
 
 
 

@@ -12,7 +12,6 @@ class FloatLineEdit;
 //using Matrix = std::vector<std::vector<double>>;
 using FloatLineEditMatrix = std::vector<std::vector<FloatLineEdit*>>;
 
-
 template <typename T>
 class MatrixTemplate
 {
@@ -148,7 +147,15 @@ public:
         return &matrixData_[row * columns_];
     }
 
+    int rows()
+    {
+        return rows_;
+    }
 
+    QList<T> row(int i)
+    {
+        return matrixData_.mid(i * columns_, columns_);
+    }
 
 private:
     int rows_;
