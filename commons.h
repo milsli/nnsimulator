@@ -116,7 +116,6 @@ public:
     {
         // this - to macierz reprezentująca warstwę neuronów (z BIAS-ami) a matrix - wektor danych wejściowych, który docelowo będzie uzupełniony o 1 (do BIAS-a)
         assert(columns_ == matrix.columns_ + 1);    // liczba kolumn 1-szej macierzy == liczbie kolumn (!) 2-giej macierzy z dodaną 1 dla BIAS-a
-
         assert( matrix.rows_ == 1);
 
         //                 (3) 2 6 7
@@ -132,6 +131,20 @@ public:
                 sum += matrixData_[(i * columns_) + j] * matrix.matrixData_[j - 1];
             }
             output[0][i] = sum;
+        }
+
+        return output;
+    }
+
+    MatrixTemplate<T> operator-(const MatrixTemplate<T> &matrix)
+    {
+        assert(this->rows_ == matrix.rows_);
+        assert(this->columns_ == matrix.columns_);
+        MatrixTemplate<T> output(rows_, columns_);
+        for (uint16_t i = 0; i < rows_; ++i) {
+            for (uint16_t j = 1; j < columns_; ++j) {
+                output[0][i] = matrixData_[(i * columns_) + j] - matrix.matrixData_[(i * columns_) + j];
+            }
         }
 
         return output;
