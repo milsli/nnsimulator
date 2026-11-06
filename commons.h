@@ -184,7 +184,8 @@ private:
 
 using Matrix = MatrixTemplate<double>;
 
-Matrix operator-(const Matrix&);
+Matrix operator-(const int cnt, const Matrix&);
+Matrix operator*(const double cnt, const Matrix&);
 
 
 class FloatLineEdit : public QLineEdit

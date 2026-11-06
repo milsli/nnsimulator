@@ -40,8 +40,6 @@ Network::~Network()
     for (Matrix *m : std::as_const(layer_)) {
         delete m;
     }
-
-
 }
 
 bool Network::readFile(const string &fileName)
