@@ -37,30 +37,6 @@ void MainWindow::startLearning()
     networkScene_->showOutput(network_->network());
 }
 
-void MainWindow::readFiles()
-{
-//    n = new Network(4, {4, 5, 3});
-
-//    n->prepareTestData();
-
-    // char buffer[10];
-    // string directory = "../NNCiag/";
-    // string filename;
-
-    // for (char ch = 'A'; ch <= 'Z'; ++ch) {
-    //     for (char count = 1; count <= 3; ++count) {
-    //         filename = ch + string(itoa(count, buffer, 10)) + "_d.bmp";
-    //         n->readFile(directory + filename, ch, 'd');
-
-    //         filename[3] = 'm';
-    //         n->readFile(directory + filename, ch, 'm');
-    //     }
-    // }
-    qDebug() << "Wczytane";
-
-//    n->randomSettings();
-}
-
 void MainWindow::setupNetworkSlot()
 {
     SetupNetworkDialog *dialog = new SetupNetworkDialog(this);
@@ -105,10 +81,7 @@ void MainWindow::setupView()
 
     setupMenu();
 
-
     startLerningButton = new QPushButton("Start learning");
-    readFilesButton = new QPushButton("Read sequence");
-
 
     networkScene_ = new NetworkScene(this);
     networkScene_->setScene({2,2});
@@ -117,9 +90,7 @@ void MainWindow::setupView()
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
 
-    mainLayout->addWidget(readFilesButton);
     mainLayout->addWidget(startLerningButton);
-
 
     QVBoxLayout *superLayout = new QVBoxLayout;
 
@@ -134,7 +105,6 @@ void MainWindow::setupView()
 
     setCentralWidget(mainWidget);
     connect(startLerningButton, &QPushButton::clicked, this, &MainWindow::startLearning);
-    connect(readFilesButton, &QPushButton::clicked, this, &MainWindow::readFiles);
 }
 
 void MainWindow::setupMenu()

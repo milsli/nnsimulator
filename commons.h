@@ -7,6 +7,7 @@
 #include <QLocale>
 #include <random>
 
+
 class FloatLineEdit;
 
 //using Matrix = std::vector<std::vector<double>>;
@@ -143,7 +144,7 @@ public:
         MatrixTemplate<T> output(rows_, columns_);
         for (uint16_t i = 0; i < rows_; ++i) {
             for (uint16_t j = 1; j < columns_; ++j) {
-                output[0][i] = matrixData_[(i * columns_) + j] - matrix.matrixData_[(i * columns_) + j];
+                output[(i * columns_) + j] = matrixData_[(i * columns_) + j] - matrix.matrixData_[(i * columns_) + j];
             }
         }
 
@@ -160,9 +161,14 @@ public:
         return &matrixData_[row * columns_];
     }
 
-    int rows()
+    int rows() const
     {
         return rows_;
+    }
+
+    int columns() const
+    {
+        return columns_;
     }
 
     QList<T> row(int i)
@@ -177,6 +183,9 @@ private:
 };
 
 using Matrix = MatrixTemplate<double>;
+
+Matrix operator-(const Matrix&);
+
 
 class FloatLineEdit : public QLineEdit
 {

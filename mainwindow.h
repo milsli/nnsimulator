@@ -23,7 +23,6 @@ public:
 
 private slots:
     void startLearning();
-    void readFiles();
 
     void setupNetworkSlot();
     void transposeMatrixSlot();
@@ -33,13 +32,7 @@ private:
     void setupView();
     void setupMenu();
 
-
-
 private:
-    //view
-    // QTableWidget *inputTable;
-    // QTableWidget *outputTable;
-
 
 //  *** menu ***
     QMenu *networkMenu;
@@ -54,15 +47,8 @@ private:
     NetworkView * networkView;
 // *** Network View ***
 
-
     QPushButton *startLerningButton;
-    QPushButton *readFilesButton;
-
     QLineEdit *messagesBox;
-
     Network *network_;
-
-
-
 };
 #endif // MAINWINDOW_H
