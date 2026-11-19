@@ -144,7 +144,8 @@ public:
         MatrixTemplate<T> output(rows_, columns_);
         for (uint16_t i = 0; i < rows_; ++i) {
             for (uint16_t j = 1; j < columns_; ++j) {
-                output[(i * columns_) + j] = matrixData_[(i * columns_) + j] - matrix.matrixData_[(i * columns_) + j];
+                // output[(i * columns_) + j] = matrixData_[(i * columns_) + j] - matrix.matrixData_[(i * columns_) + j];
+                output[i][j] = matrixData_[(i * columns_) + j] - matrix.matrixData_[(i * columns_) + j];
             }
         }
 
@@ -187,6 +188,8 @@ using Matrix = MatrixTemplate<double>;
 Matrix operator-(const int cnt, const Matrix&);
 Matrix operator*(const double cnt, const Matrix&);
 
+bool product(Matrix *inout, const Matrix &in);
+Matrix *matrixMultiply(const Matrix &inout, const Matrix &in);
 
 class FloatLineEdit : public QLineEdit
 {

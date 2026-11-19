@@ -30,6 +30,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         setupnetworkdialog.h setupnetworkdialog.cpp
         networkview.h networkview.cpp
         networkscene.h networkscene.cpp
+        showvaluesdialog.h showvaluesdialog.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

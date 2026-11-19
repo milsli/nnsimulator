@@ -188,6 +188,19 @@ void Network::readFile(const QString &fileName, char &character, const char md)
 
 void Network::backPropagation()
 {
+    const double eta = 0.5;
+    Matrix *last = layer_.last();
+    Matrix *firstDelta = new Matrix(outputMatrix->columns());
+    *firstDelta = (*outputMatrix) - (*last);
+    Matrix *derivaite = new Matrix(outputMatrix->columns());
+    *derivaite = 1 - (*outputMatrix);
+
+    product(derivaite, *outputMatrix);
+    product(derivaite, *firstDelta);
+
+    Matrix deltaW = eta * (*derivaite);
+
+
 
 }
 
@@ -232,8 +245,7 @@ void Network::startLearning()
                 ++layerCount;
             }
 
-        // wyznaczenie różnicy - jeżeli minimalna to koniec
-        // poprawka wag - back propagation
+            backPropagation();
 
             // usunięcie wiersza wejściowego z layers_
             if (layer_.isEmpty() != true) {

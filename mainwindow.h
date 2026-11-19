@@ -28,6 +28,8 @@ private slots:
     void transposeMatrixSlot();
     void multiplyMatrixSlot();
 
+    void showValues();
+
 private:    
     void setupView();
     void setupMenu();
@@ -48,6 +50,7 @@ private:
 // *** Network View ***
 
     QPushButton *startLerningButton;
+    QPushButton *showInterior;
     QLineEdit *messagesBox;
     Network *network_;
 };

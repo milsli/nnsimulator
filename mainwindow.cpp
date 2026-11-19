@@ -15,6 +15,7 @@
 #include "multiplydialog.h"
 #include "networkview.h"
 #include "networkscene.h"
+#include "showvaluesdialog.h"
 
 using namespace std::chrono_literals;
 using namespace std;
@@ -73,6 +74,12 @@ void MainWindow::multiplyMatrixSlot()
     dialog->exec();
 }
 
+void MainWindow::showValues()
+{
+    ShowValuesDialog *dialog = new ShowValuesDialog(network_, this);
+    dialog->exec();
+}
+
 void MainWindow::setupView()
 {
     QSize windowSize = QGuiApplication::primaryScreen()->availableGeometry().size() * 0.4;
@@ -82,6 +89,7 @@ void MainWindow::setupView()
     setupMenu();
 
     startLerningButton = new QPushButton("Start learning");
+    showInterior = new QPushButton("Show values");
 
     networkScene_ = new NetworkScene(this);
     networkScene_->setScene({2,2});
@@ -91,6 +99,8 @@ void MainWindow::setupView()
     QHBoxLayout *mainLayout = new QHBoxLayout;
 
     mainLayout->addWidget(startLerningButton);
+    mainLayout->addWidget(showInterior);
+
 
     QVBoxLayout *superLayout = new QVBoxLayout;
 
@@ -105,6 +115,7 @@ void MainWindow::setupView()
 
     setCentralWidget(mainWidget);
     connect(startLerningButton, &QPushButton::clicked, this, &MainWindow::startLearning);
+    connect(showInterior, &QPushButton::clicked, this, &MainWindow::showValues);
 }
 
 void MainWindow::setupMenu()
